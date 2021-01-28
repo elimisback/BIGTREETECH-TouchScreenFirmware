@@ -99,7 +99,7 @@
  * Options:  0: Disabled (RECOMMENDED FOR TFT24)
  *           1: Enabled
  */
-#define DEFAULT_ST7920_FULLSCREEN_MODE 0 // Default: 0
+#define DEFAULT_ST7920_FULLSCREEN_MODE 1 // Default: 0
 
 /**
  * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
@@ -109,7 +109,7 @@
  *
  * Options:  0: Disabled    1: Enabled
  */
-#define SERIAL_ALWAYS_ON 0  // Default: 0
+#define SERIAL_ALWAYS_ON 1  // Default: 0
 
 /**
  * LCD/Touch Encoder
@@ -172,27 +172,27 @@
 #define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E2"} // (X, Y, Z, E, E2)
 
 // Default X & Y speed (mm/min)
-#define SPEED_XY_SLOW   1000
-#define SPEED_XY_NORMAL 3000
-#define SPEED_XY_FAST   5000
+#define SPEED_XY_SLOW   10000
+#define SPEED_XY_NORMAL 30000
+#define SPEED_XY_FAST   50000
 
 // Default Z speed (mm/min)
-#define SPEED_Z_SLOW   500
-#define SPEED_Z_NORMAL 1000
-#define SPEED_Z_FAST   2000
+#define SPEED_Z_SLOW   30
+#define SPEED_Z_NORMAL 300
+#define SPEED_Z_FAST   600
 
 // Extrude speed (mm/min)
-#define EXTRUDE_SLOW_SPEED     60
-#define EXTRUDE_NORMAL_SPEED  600
-#define EXTRUDE_FAST_SPEED   1200
+#define EXTRUDE_SLOW_SPEED     150
+#define EXTRUDE_NORMAL_SPEED  1500
+#define EXTRUDE_FAST_SPEED   3000
 
 // Size of machine
 #define X_MIN_POS   0
 #define Y_MIN_POS   0
 #define Z_MIN_POS   0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 300
+#define Y_MAX_POS 300
+#define Z_MAX_POS 400
 
 // Pause Settings
 #define NOZZLE_PAUSE_RETRACT_LENGTH               15  // (mm)
@@ -263,13 +263,13 @@
 #define ENABLE_BL_VALUE 1 // Default: 1
 
 /** TouchMI settings (on ABL menu)
- * 
+ *
  * Enable this option for settings TouchMI sensor on ABL Menu.
- * 
+ *
  * ( Init, Zoffset, Save, test)
- * 
+ *
  * Options: [enable:1, disable:0]
- * 
+ *
  */
 #define TOUCHMI_SENSOR_VALUE 0 // Default: 0
 
