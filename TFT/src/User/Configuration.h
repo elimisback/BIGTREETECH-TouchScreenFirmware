@@ -107,7 +107,7 @@
  * Options: 0: Disabled (RECOMMENDED FOR TFT24)
  *          1: Enabled
  */
-#define MARLIN_MODE_FULLSCREEN 0  // Default: 0
+#define MARLIN_MODE_FULLSCREEN 1  // Default: 0
 
 /**
  * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
@@ -271,22 +271,11 @@
  */
 #define ENABLE_BL_VALUE 1  // Default: 1
 
-<<<<<<< HEAD
-/** TouchMI settings (on ABL menu)
- *
- * Enable this option for settings TouchMI sensor on ABL Menu.
- *
- * ( Init, Zoffset, Save, test)
- *
- * Options: [enable:1, disable:0]
- *
-=======
 /**
  * TouchMI settings (on ABL menu)
  * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
  *
  * Options: [0: Disabled, 1: Enabled]
->>>>>>> upstream/master
  */
 #define TOUCHMI_SENSOR_VALUE 0  // Default: 0
 
@@ -303,7 +292,7 @@
  *
  * Options: [0: Disabled, 1: Enabled]
  */
-#define AUTO_SAVE_LOAD_BL_VALUE 1  // Default: 1
+#define AUTO_SAVE_LOAD_BL_VALUE 0  // Default: 1
 
 // PID autotune
 #define PID_CMD {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
@@ -315,7 +304,7 @@
  *
  * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
  */
-#define EMULATE_M600 true  // To enabled: true | To disabled: false (Default: true)
+#define EMULATE_M600 false  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * M601 ; pause print
