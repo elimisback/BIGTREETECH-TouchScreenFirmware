@@ -107,7 +107,7 @@
  * Options: 0: Disabled (RECOMMENDED FOR TFT24)
  *          1: Enabled
  */
-#define MARLIN_MODE_FULLSCREEN 0  // Default: 0
+#define MARLIN_MODE_FULLSCREEN 1  // Default: 0
 
 /**
  * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
@@ -169,7 +169,7 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E0",  "E1"}  // (X, Y, Z, E0, E1)
+#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z1",   "E0",  "Z2"}  // (X, Y, Z, E0, E1)
 
 // Default X & Y speed (mm/min)
 #define SPEED_XY_SLOW   10000
@@ -190,8 +190,8 @@
 #define X_MIN_POS   0
 #define Y_MIN_POS   0
 #define Z_MIN_POS   0
-#define X_MAX_POS 300
-#define Y_MAX_POS 300
+#define X_MAX_POS 310
+#define Y_MAX_POS 306
 #define Z_MAX_POS 400
 
 /**
@@ -216,7 +216,7 @@
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4).
  */
-#define LEVELING_EDGE_DISTANCE        20  // Inset distance from bed's edge for calculating leveling point location
+#define LEVELING_EDGE_DISTANCE        30  // Inset distance from bed's edge for calculating leveling point location
 #define LEVELING_POINT_Z            0.2f  // Z-axis position when nozzle stays for leveling
 #define LEVELING_POINT_MOVE_Z      10.0f  // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE  6000  // (mm/min) X and Y axes move feedrate
@@ -271,22 +271,11 @@
  */
 #define ENABLE_BL_VALUE 1  // Default: 1
 
-<<<<<<< HEAD
-/** TouchMI settings (on ABL menu)
- *
- * Enable this option for settings TouchMI sensor on ABL Menu.
- *
- * ( Init, Zoffset, Save, test)
- *
- * Options: [enable:1, disable:0]
- *
-=======
 /**
  * TouchMI settings (on ABL menu)
  * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
  *
  * Options: [0: Disabled, 1: Enabled]
->>>>>>> upstream/master
  */
 #define TOUCHMI_SENSOR_VALUE 0  // Default: 0
 
