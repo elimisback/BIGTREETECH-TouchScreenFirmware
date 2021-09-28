@@ -7,7 +7,7 @@ bool modeSwitching = false;
 // change UI mode
 void Mode_Switch(void)
 {
-  int8_t nowMode = infoSettings.mode & 1;  // Marlin mode or Touch mode
+  int8_t nowMode = GET_BIT(infoSettings.mode, 0);  // Marlin mode or Touch mode
   infoMenu.cur = 0;
 
   HW_InitMode(nowMode);
@@ -16,6 +16,10 @@ void Mode_Switch(void)
   {
     case MODE_SERIAL_TSC:
       GUI_RestoreColorDefault();
+
+      // always init the machine settings to restart the temperature polling
+      // process needed by parseAck() function to establish the connection
+      initMachineSettings();
 
       if (infoSettings.status_screen == 1)  // if Status Screen menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus;  // status screen as default home screen on boot
@@ -44,7 +48,7 @@ void Mode_Switch(void)
 
     case MODE_MARLIN:
       #ifdef HAS_EMULATOR
-        if (infoSettings.serial_alwaysOn == ENABLED)
+        if (infoSettings.serial_always_on == ENABLED)
           updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
 
         infoMenu.menu[infoMenu.cur] = menuMarlinMode;

@@ -1,15 +1,14 @@
 #include "FanControl.h"
 #include "includes.h"
 
-#define RRF_FAN_QUERY_MS  3000
 #define NEXT_FAN_WAIT 500  // 1 second is 1000
 
 const char* fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
 const char* fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
 static uint8_t setFanSpeed[MAX_FAN_COUNT] = {0};
-static bool needSetFanSpeed[MAX_FAN_COUNT] = {false};
 static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t needSetFanSpeed = 0;
 
 static bool ctrlFanQueryWait = false;
 static uint32_t nextCtrlFanTime = 0;
@@ -29,7 +28,7 @@ bool fanIsValid(uint8_t index)
 
 void fanSetSpeed(uint8_t i, uint8_t speed)
 {
-  needSetFanSpeed[i] = fanGetCurSpeed(i) != speed;
+  SET_BIT_VALUE(needSetFanSpeed, i, fanGetCurSpeed(i) != speed);
   setFanSpeed[i] = speed;
 }
 
@@ -74,11 +73,11 @@ void loopFan(void)
 {
   for (uint8_t i = 0; i < MAX_FAN_COUNT; i++)
   {
-    if (needSetFanSpeed[i] && (OS_GetTimeMs() > nextCtrlFanTime))
+    if (GET_BIT(needSetFanSpeed, i) && (OS_GetTimeMs() > nextCtrlFanTime))
     {
       if (storeCmd(fanCmd[i], setFanSpeed[i]))
       {
-        needSetFanSpeed[i] = false;
+        SET_BIT_OFF(needSetFanSpeed, i);
       }
 
       nextCtrlFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT;  // avoid rapid fire, clogging the queue
@@ -97,23 +96,5 @@ void ctrlFanQuery(void)
   if (infoHost.connected && !infoHost.wait && !ctrlFanQueryWait && infoSettings.ctrl_fan_en)
   {
     ctrlFanQueryWait = storeCmd("M710\n");
-  }
-}
-
-// TODO refactor this into something called `rrfStatusQuery()` in the proper location
-void fanQuery(void)
-{
-  if (!infoHost.connected)
-    return;
-
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-  {
-    static uint32_t rrf_next_fan_time = 0;
-
-    if (OS_GetTimeMs() > rrf_next_fan_time)
-    {
-      rrf_next_fan_time = OS_GetTimeMs() + RRF_FAN_QUERY_MS;
-      storeCmd("M408 S0\n");
-    }
   }
 }
