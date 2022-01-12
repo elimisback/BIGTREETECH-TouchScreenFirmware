@@ -23,9 +23,9 @@ void menuUnifiedMove(void)
       #if DELTA_PROBE_TYPE == 0  // if not Delta printer
         {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
       #else
-        {ICON_CALIBRATION,             LABEL_CALIBRATION},
+        {ICON_DELTA_CALIBRATE,         LABEL_CALIBRATION},
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
