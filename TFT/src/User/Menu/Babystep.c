@@ -64,14 +64,14 @@ void menuBabystep(void)
       #else
         {ICON_DEC,                     LABEL_DEC},
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
         {ICON_NOZZLE_UP,               LABEL_UP},
       #else
         {ICON_INC,                     LABEL_INC},
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_001_MM,                  LABEL_001_MM},
       {ICON_RESET_VALUE,             LABEL_RESET},
       {ICON_BACK,                    LABEL_BACK},
@@ -119,7 +119,7 @@ void menuBabystep(void)
   menuDrawPage(&babyStepItems);
   babyReDraw(now_babystep, now_z_offset, force_z_offset, false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuBabystep)
+  while (MENU_IS(menuBabystep))
   {
     unit = moveLenSteps[moveLenSteps_index];
     babystep = babystepGetValue();  // always load current babystep
@@ -169,7 +169,7 @@ void menuBabystep(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

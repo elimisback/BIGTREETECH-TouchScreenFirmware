@@ -29,8 +29,8 @@ void menuSpeed(void)
     // icon                          label
     {
       {ICON_DEC,                     LABEL_DEC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
       {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
@@ -42,8 +42,7 @@ void menuSpeed(void)
   KEY_VALUES key_num = KEY_IDLE;
   LASTSPEED lastSpeed;
 
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    storeCmd("M220\nM221\n");  // RRF has current settings via periodic polling (fanQuery)
+  speedQuery();
 
   speedSetPercent(item_index, speedGetCurPercent(item_index));
   lastSpeed = (LASTSPEED) {speedGetCurPercent(item_index), speedGetSetPercent(item_index)};
@@ -55,7 +54,7 @@ void menuSpeed(void)
   menuDrawPage(&percentageItems);
   percentageReDraw(item_index, false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuSpeed)
+  while (MENU_IS(menuSpeed))
   {
     key_num = menuKeyGetValue();
 
@@ -74,7 +73,6 @@ void menuSpeed(void)
         if (val != speedGetSetPercent(item_index))
           speedSetPercent(item_index, val);
 
-        menuDrawPage(&percentageItems);
         percentageReDraw(item_index, false);
         break;
       }
@@ -86,7 +84,11 @@ void menuSpeed(void)
         break;
 
       case KEY_ICON_4:
-        item_index = (item_index + 1) % SPEED_NUM;
+        if (infoSettings.ext_count > 0)
+        {
+          item_index = (item_index + 1) % SPEED_NUM;
+        }
+
         percentageItems.title.index = itemPercentTypeTitle[item_index];
         percentageItems.items[key_num] = itemPercentType[item_index];
 
@@ -107,7 +109,7 @@ void menuSpeed(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

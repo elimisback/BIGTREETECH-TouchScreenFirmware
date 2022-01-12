@@ -139,8 +139,8 @@ void menuMBL(void)
       #else
         {ICON_DEC,                     LABEL_DEC},
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
         {ICON_NOZZLE_UP,               LABEL_UP},
       #else
@@ -172,7 +172,7 @@ void menuMBL(void)
   mblDrawHeader(!mblRunning ? NULL : &mblPoint);
   mblDrawValue(now);
 
-  while (infoMenu.menu[infoMenu.cur] == menuMBL)
+  while (MENU_IS(menuMBL))
   {
     unit = moveLenSteps[curUnit_index];
     curValue = coordinateGetAxisActual(Z_AXIS);
@@ -193,7 +193,7 @@ void menuMBL(void)
         if (mblRunning)
           mblNotifyError(true);
         else
-          infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+          OPEN_MENU(menuUnifiedHeat);
         break;
 
       // increase Z height
@@ -253,7 +253,7 @@ void menuMBL(void)
         if (mblRunning)
           mblAbort();
 
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

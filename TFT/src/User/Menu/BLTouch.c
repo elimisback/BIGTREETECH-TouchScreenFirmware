@@ -13,8 +13,8 @@ const MENUITEMS BLTouchItems = {
     {ICON_BLTOUCH_DEPLOY,          LABEL_DEPLOY},
     {ICON_BLTOUCH_STOW,            LABEL_STOW},
     {ICON_BLTOUCH_REPEAT,          LABEL_REPEAT},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
     {ICON_BACK,                    LABEL_BACK},
   }
 };
@@ -25,7 +25,7 @@ void menuBLTouch(void)
 
   menuDrawPage(&BLTouchItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuBLTouch)
+  while (MENU_IS(menuBLTouch))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -52,7 +52,7 @@ void menuBLTouch(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

@@ -22,10 +22,10 @@ void menuExtrude(void)
     // icon                          label
     {
       {ICON_UNLOAD,                  LABEL_UNLOAD},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_LOAD,                    LABEL_LOAD},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_E_5_MM,                  LABEL_5_MM},
       {ICON_NORMAL_SPEED,            LABEL_NORMAL},
       {ICON_BACK,                    LABEL_BACK},
@@ -36,14 +36,14 @@ void menuExtrude(void)
   float extrNewCoord  = 0.0f;
   float extrKnownCoord = 0.0f;
 
-  if (eAxisBackup.backedUp == false)
+  if (eAxisBackup.handled == false)
   {
     loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.feedrate = coordinateGetFeedRate();
     eAxisBackup.relative = eGetRelative();
-    eAxisBackup.backedUp = true;
+    eAxisBackup.handled = true;
   }
 
   extrKnownCoord = extrNewCoord = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
@@ -61,7 +61,7 @@ void menuExtrude(void)
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
-  while (infoMenu.menu[infoMenu.cur] == menuExtrude)
+  while (MENU_IS(menuExtrude))
   {
     key_num = menuKeyGetValue();
 
@@ -77,7 +77,6 @@ void menuExtrude(void)
         float val = editFloatValue(extlenSteps[COUNT(extlenSteps) - 1] * -1, extlenSteps[COUNT(extlenSteps) - 1], 0, 0);
         extrNewCoord += val;
 
-        menuDrawPage(&extrudeItems);
         extruderReDraw(curExtruder_index, extrKnownCoord, false);
         break;
       }
@@ -91,13 +90,13 @@ void menuExtrude(void)
         if (infoSettings.ext_count > 1)
         {
           curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
-
           extruderReDraw(curExtruder_index, extrKnownCoord, false);
         }
         else
         {
-          infoMenu.menu[++infoMenu.cur] = menuHeat;
-          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
+          heatSetCurrentIndex(currentTool);  // preselect current nozzle for "Heat" menu
+          OPEN_MENU(menuHeat);
+          eAxisBackup.handled = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
         }
         break;
 
@@ -117,8 +116,8 @@ void menuExtrude(void)
 
       case KEY_ICON_7:
         cooldownTemperature();
-        infoMenu.cur--;
-        eAxisBackup.backedUp = false;  // exiting from Extrude menu, no need for it anymore
+        CLOSE_MENU();
+        eAxisBackup.handled = false;  // exiting from Extrude menu, no need for it anymore
         break;
 
       default:
@@ -145,6 +144,10 @@ void menuExtrude(void)
           {
             extrKnownCoord = extrNewCoord;
             extruderReDraw(curExtruder_index, extrNewCoord, true);
+            if (isPrinting() && isPaused())
+            {
+              setExtrusionDuringPause(true);
+            }
           }
           break;
       }
@@ -153,7 +156,7 @@ void menuExtrude(void)
     loopProcess();
   }
 
-  if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)
+  if (eAxisBackup.handled == false)  // the user exited from menu (not any other process/popup/etc)
   { // restore E axis coordinate, feedrate and relativeness to pre-extrude state
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);
     mustStoreCmd("G0 F%d\n", eAxisBackup.feedrate);

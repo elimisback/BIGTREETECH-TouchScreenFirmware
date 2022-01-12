@@ -266,14 +266,25 @@ void percentageReDraw(uint8_t itemIndex, bool skipHeader)
   displayExhibitValue(tempstr);
 }
 
+static void redrawMenu(MENU_TYPE menuType)
+{ // used only when exiting from numpad
+  if (menuType == MENU_TYPE_ICON)
+    menuDrawPage(getCurMenuItems());
+  else if(menuType == MENU_TYPE_LISTVIEW)
+    listViewRefreshMenu();
+}
+
 // Edit an integer value in a standard menu
 int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValue, int32_t value)
 {
   int32_t val;
   char tempstr[30];
+  MENU_TYPE menuTypeBackup = getMenuType();
 
   sprintf(tempstr, "Min:%i | Max:%i", minValue, maxValue);
   val = numPadInt((uint8_t *) tempstr, value, resetValue, false);
+
+  redrawMenu(menuTypeBackup);
 
   return NOBEYOND(minValue, val, maxValue);
 }
@@ -283,9 +294,12 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
 {
   float val;
   char tempstr[30];
+  MENU_TYPE menuTypeBackup = getMenuType();
 
   sprintf(tempstr, "Min:%.2f | Max:%.2f", minValue, maxValue);
   val = numPadFloat((uint8_t *) tempstr, value, resetValue, true);
+
+  redrawMenu(menuTypeBackup);
 
   return NOBEYOND(minValue, val, maxValue);
 }
@@ -328,7 +342,7 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
       strcat(tempMsg, "\n");
       strcat(tempMsg, tempStr);
 
-      setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
+      setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_NULL);
       showDialog(DIALOG_TYPE_ERROR, NULL, NULL, NULL);
       return COLD;
     }

@@ -5,7 +5,7 @@ SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
 
 void updateListeningMode(MENUITEMS * menu)
 {
-  if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1)
+  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)
   {
     menu->items[4].label.index = LABEL_OFF;
     reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
@@ -38,7 +38,7 @@ void menuDisconnect(void)
   }
   Serial_Init(ALL_PORTS);
 
-  infoMenu.cur--;
+  CLOSE_MENU();
 }
 
 void menuBaudrate(void)
@@ -72,7 +72,7 @@ void menuBaudrate(void)
 
   listViewCreate(title, totalItems, size, &curPage, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
+  while (MENU_IS(menuBaudrate))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -115,14 +115,14 @@ void menuSerialPorts(void)
 
   listViewCreate(title, totalItems, SERIAL_PORT_COUNT, NULL, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuSerialPorts)
+  while (MENU_IS(menuSerialPorts))
   {
     curIndex = listViewGetSelectedIndex();
 
     if (curIndex < (KEY_VALUES)SERIAL_PORT_COUNT)
     {
       portIndex = (SERIAL_PORT_INDEX)curIndex;
-      infoMenu.menu[++infoMenu.cur] = menuBaudrate;
+      OPEN_MENU(menuBaudrate);
     }
 
     loopProcess();
@@ -141,8 +141,8 @@ void menuConnectionSettings(void)
       {ICON_STOP,                    LABEL_EMERGENCYSTOP},
       {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
       {ICON_BAUD_RATE,               LABEL_ON},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
@@ -152,17 +152,17 @@ void menuConnectionSettings(void)
   updateListeningMode(&connectionSettingsItems);
   menuDrawPage(&connectionSettingsItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuConnectionSettings)
+  while (MENU_IS(menuConnectionSettings))
   {
     curIndex = menuKeyGetValue();
     switch (curIndex)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuSerialPorts;
+        OPEN_MENU(menuSerialPorts);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuDisconnect;
+        OPEN_MENU(menuDisconnect);
         break;
 
       case KEY_ICON_2:
@@ -177,7 +177,7 @@ void menuConnectionSettings(void)
         break;
 
       case KEY_ICON_4:
-        TOGGLE_BIT(infoSettings.general_settings, LISTENING_MODE);
+        TOGGLE_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE);
         storePara();
 
         updateListeningMode(&connectionSettingsItems);
@@ -185,7 +185,7 @@ void menuConnectionSettings(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

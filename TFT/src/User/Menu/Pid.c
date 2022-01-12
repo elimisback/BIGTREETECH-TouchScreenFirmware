@@ -8,14 +8,14 @@ const MENUITEMS pidWaitItems = {
   LABEL_PID_TITLE,
   // icon                          label
   {
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
   }
 };
 
@@ -62,6 +62,8 @@ void pidUpdateStatus(bool succeeded)
   {
     pidRunning = false;
 
+    LED_SetColor(0, 255, 0, false);  // set (neopixel) LED light to GREEN
+
     if (pidSucceeded)  // if all the PID processes successfully terminated, allow to save to EEPROM
     {
       BUZZER_PLAY(SOUND_SUCCESS);
@@ -96,8 +98,11 @@ static inline void pidCheckTimeout(void)
     if (OS_GetTimeMs() > pidTimeout)
     {
       pidRunning = false;
-//      uint8_t pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
-//      pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
+      //pidCounter = 0;        // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
+      //pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
+
+      LED_SetColor(0, 255, 0, false);  // set (neopixel) LED light to GREEN
+
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BUSY));
@@ -128,7 +133,7 @@ void menuPidWait(void)
   GUI_DispString(20, BYTE_HEIGHT * 5, textSelect(LABEL_PID_START_INFO_2));
   GUI_DispStringInRectEOL(20, BYTE_HEIGHT * 7, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_PID_START_INFO_3));
 
-  while (infoMenu.menu[infoMenu.cur] == menuPidWait)
+  while (MENU_IS(menuPidWait))
   {
     if (!isPressed)  // if touch screen is not yet pressed
     {
@@ -141,7 +146,7 @@ void menuPidWait(void)
     }
 
     if (isReleased)
-      infoMenu.cur--;
+      CLOSE_MENU();
 
     pidCheckTimeout();
 
@@ -158,12 +163,13 @@ static inline void pidStart(void)
   pidUpdateCounter();  // update the number of set temperatures (number of PID processes to execute)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
 
-  mustStoreCmd("M150 R255 U0 B0\n");  // set LED light to RED
+  LED_SetColor(255, 0, 0, false);  // set (neopixel) LED light to RED
+  LCD_SET_KNOB_LED_IDLE(false);    // set infoSettings.knob_led_idle temporary to OFF
+
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-  {
-    mustStoreCmd("M106 S255\n");      // set fan speed to max
-  }
-  mustStoreCmd("G4 S1\n");            // wait 1 sec
+    mustStoreCmd("M106 S255\n");  // set fan speed to max
+
+  mustStoreCmd("G4 S1\n");  // wait 1 sec
 
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // hotends + bed + chamber
   {
@@ -174,10 +180,9 @@ static inline void pidStart(void)
     }
   }
 
-  mustStoreCmd("M107\n");             // stop fan
-  mustStoreCmd("M150 R0 U255 B0\n");  // set LED light to GREEN
+  mustStoreCmd("M107\n");  // stop fan
 
-  infoMenu.menu[++infoMenu.cur] = menuPidWait;
+  OPEN_MENU(menuPidWait);
 }
 
 void menuPid(void)
@@ -189,8 +194,8 @@ void menuPid(void)
     // icon                          label
     {
       {ICON_DEC,                     LABEL_DEC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_NOZZLE,                  LABEL_NOZZLE},
       {ICON_5_DEGREE,                LABEL_5_DEGREE},
@@ -217,7 +222,7 @@ void menuPid(void)
   menuDrawPage(&pidItems);
   temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuPid)
+  while (MENU_IS(menuPid))
   {
     key_num = menuKeyGetValue();
 
@@ -240,7 +245,6 @@ void menuPid(void)
         if (val != pidHeaterTarget[curTool_index])  // if value is different than target, change it
           pidHeaterTarget[curTool_index] = val;
 
-        menuDrawPage(&pidItems);
         temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
         break;
       }
@@ -296,7 +300,10 @@ void menuPid(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        LED_SetColor(0, 0, 0, false);  // set (neopixel) LED light to OFF
+        LCD_SET_KNOB_LED_IDLE(true);   // restore infoSettings.knob_led_idle and knob LED color to their default values
+
+        CLOSE_MENU();
         break;
 
       default:

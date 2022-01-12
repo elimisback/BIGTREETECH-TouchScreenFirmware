@@ -59,7 +59,7 @@ static void m291_loop(void)
 {
   if (m291_mode == -1 || (expire_time > 0 && OS_GetTimeMs() > expire_time))
   {
-    infoMenu.cur--;
+    CLOSE_MENU();
     if (rrfStatusIsMacroBusy())
       rrfShowRunningMacro();
   }
@@ -77,7 +77,7 @@ void ParseACKJsonParser::endDocument()
     _setDialogTitleStr((uint8_t *)(m291_title == NULL ? M291 : m291_title));
     _setDialogMsgStr((uint8_t *)m291_msg);
     _setDialogOkTextLabel(LABEL_CONFIRM);
-    _setDialogCancelTextLabel(m291_mode > 2 ? LABEL_CANCEL : LABEL_BACKGROUND);
+    _setDialogCancelTextLabel(m291_mode > 2 ? LABEL_CANCEL : LABEL_NULL);
     expire_time = m291_timeo > 0 ? OS_GetTimeMs() + m291_timeo : 0;
     showDialog(m291_mode > 2 ? DIALOG_TYPE_QUESTION : DIALOG_TYPE_INFO, m291_confirm,
         m291_mode > 2 ? m291_cancel : NULL, m291_loop);
@@ -204,7 +204,7 @@ void ParseACKJsonParser::value(const char *value)
         string_end = strstr(string_start, "ELECTRONICS");
         infoSetFirmwareName((uint8_t *)string_start, string_end-string_start);
       }
-      else if ((string_start = strstr(value, (char *)"access point")) != NULL)    //parse M552 
+      else if ((string_start = strstr(value, (char *)"access point")) != NULL)    //parse M552
       {
         string_end = strstr(string_start, ",");
         string_start += 13;
@@ -235,8 +235,7 @@ void ParseACKJsonParser::value(const char *value)
     case result:
         if (starting_print)
         {
-          strcpy(infoFile.title, value);
-          setPrintHost(true);
+          printRemoteStart(value);
           starting_print = false;
         }
       break;

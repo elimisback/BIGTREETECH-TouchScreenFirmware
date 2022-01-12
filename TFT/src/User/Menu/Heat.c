@@ -18,8 +18,8 @@ void menuHeat(void)
     // icon                          label
     {
       {ICON_DEC,                     LABEL_DEC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_NOZZLE,                  LABEL_NOZZLE},
       {ICON_5_DEGREE,                LABEL_5_DEGREE},
@@ -42,7 +42,7 @@ void menuHeat(void)
   menuDrawPage(&heatItems);
   temperatureReDraw(tool_index, NULL, false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuHeat)
+  while (MENU_IS(menuHeat))
   {
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = heatGetTargetTemp(tool_index);
@@ -62,7 +62,6 @@ void menuHeat(void)
         if (val != actTarget)
           heatSetTargetTemp(tool_index, val);
 
-        menuDrawPage(&heatItems);
         temperatureReDraw(tool_index, NULL, false);
         break;
       }
@@ -96,7 +95,7 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

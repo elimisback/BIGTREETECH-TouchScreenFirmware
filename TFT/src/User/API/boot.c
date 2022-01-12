@@ -11,18 +11,18 @@ GUI_POINT bmp_size;
 
 // This List is Auto-Generated. Please add new icons in icon_list.inc only
 const char * const  iconBmpName[] = {
-#define X_ICON(NAME) STRINGIFY(NAME) ,
-#include "icon_list.inc"
-#undef  X_ICON
-// add new icons in icon_list.inc only
+  #define X_ICON(NAME) #NAME ,
+    #include "icon_list.inc"
+  #undef X_ICON
+  // add new icons in icon_list.inc only
 };
 
-// This List is Auto-Generated. Please add new icons in icon_list.inc only
+// This List is Auto-Generated. Please add new icons in small_icon_list.inc only
 const char * const  smallIconBmpName[] = {
-#define X_SMALLICON(NAME) STRINGIFY(NAME) ,
-#include "small_icon_list.inc"
-#undef  X_SMALLICON
-// add new icons in small_icon_list.inc only
+  #define X_SMALLICON(NAME) #NAME ,
+    #include "small_icon_list.inc"
+  #undef X_SMALLICON
+  // add new icons in small_icon_list.inc only
 };
 
 BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
@@ -122,7 +122,7 @@ bool updateIcon(void)
   uint16_t notfound = 0;
   char nowBmp[64];
   char tempstr[50];
-  char * bootLogoPath = BMP_ROOT_DIR "/Logo.bmp";
+  char * bootLogoPath = BMP_ROOT_DIR "/Logo" STR_PORTRAIT ".bmp";
   char * infoboxPath = BMP_ROOT_DIR "/InfoBox.bmp";
   BMPUPDATE_STAT bmpState;
 
@@ -205,7 +205,7 @@ void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState)
   char * stat_txt;
   char error_txt[30];
 
-  GUI_SetColor(RED);
+  GUI_SetColor(infoSettings.reminder_color);
   GUI_ClearPrect(&labelFailedRect);
   GUI_DispString(labelFailedRect.x0, labelFailedRect.y0, lbl);
 

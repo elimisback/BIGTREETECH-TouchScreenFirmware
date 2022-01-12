@@ -33,9 +33,9 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
 // icon            ItemType    Item Title              item value text(only for custom value)
-  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
-  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
-  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
+  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_NULL},
+  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_NULL},
+  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_NULL},
 };
 
 // Load elements for selected parameter
@@ -125,12 +125,12 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
     }
     else
     {
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
     }
   }
   else
   {
-    parameterMainItem->icon = CHARICON_BACKGROUND;
+    parameterMainItem->icon = CHARICON_NULL;
   }
 }
 
@@ -149,7 +149,7 @@ void menuShowParameter(void)
 
   listViewCreate(parameterTypes[curParameter], NULL, enabledElementCount, NULL, false, NULL, loadElements);
 
-  while (infoMenu.menu[infoMenu.cur] == menuShowParameter)
+  while (MENU_IS(menuShowParameter))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -160,7 +160,7 @@ void menuShowParameter(void)
         {
           parametersChanged = true;
         }
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
@@ -220,7 +220,7 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
     }
     else
     {
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
     }
   }
   else
@@ -228,7 +228,7 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
     if (infoMachineSettings.EEPROM == 1 && index < totalItems)
       *parameterMainItem = eepromItems[(index - enabledParameterCount)];
     else
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
   }
 }
 
@@ -242,7 +242,7 @@ void menuParameterSettings(void)
 
   listViewCreate(title, NULL, totalItems, &psCurPage, false, NULL, loadParameters);
 
-  while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
+  while (MENU_IS(menuParameterSettings))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -258,7 +258,7 @@ void menuParameterSettings(void)
         else
         {
           psCurPage = 0;
-          infoMenu.cur--;
+          CLOSE_MENU();
         }
         break;
 
@@ -270,7 +270,7 @@ void menuParameterSettings(void)
           if (curParameter < PARAMETERS_COUNT)
           {
             mustStoreCmd("M503 S0\n");
-            infoMenu.menu[++infoMenu.cur] = menuShowParameter;
+            OPEN_MENU(menuShowParameter);
           }
           break;
         }
