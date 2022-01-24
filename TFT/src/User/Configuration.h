@@ -36,7 +36,7 @@
  *                P4: [min: 0, max: 9]
  *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 250000: 7, 500000: 8, 1000000: 9]
  */
-#define SP_1 6  // Default: 6
+#define SP_1 7  // Default: 6
 #define SP_2 0  // Default: 0
 #define SP_3 0  // Default: 0
 #define SP_4 0  // Default: 0
@@ -274,7 +274,7 @@
  *
  *   Options: [Layer height: 0, Layer number: 1, Both - height & number: 2]
  */
-#define LAYER_DISP_TYPE 0  // Default: 0
+#define LAYER_DISP_TYPE 2  // Default: 0
 
 //================================================================================
 //============================= Marlin Mode Settings =============================
@@ -290,7 +290,7 @@
  *
  *   Options: [Marlin Mode: 0, Touch Mode: 1, Blocked Marlin Mode: 2, Blocked Touch Mode: 3]
  */
-#define DEFAULT_MODE 1  // Default: 1
+#define DEFAULT_MODE 0  // Default: 1
 
 /**
  * Serial Always ON
@@ -299,7 +299,7 @@
  * no matter which mode the TFT is in.
  *   Options: [disable: 0, enable: 1]
  */
-#define SERIAL_ALWAYS_ON 0  // Default: 0
+#define SERIAL_ALWAYS_ON 1  // Default: 0
 
 /**
  * Marlin Mode Background & Font Colors
@@ -380,7 +380,7 @@
  * Fan Count
  *   Value range: [min: 1, max: 6]
  */
-#define FAN_COUNT 1  // Default: 1
+#define FAN_COUNT 2  // Default: 1
 
 /**
  * Controller Fan Support
@@ -398,7 +398,7 @@
  *                bed:     [min: 20, max: 400]
  *                chamber: [min: 20, max: 200]
  */
-#define MAX_TEMP {275, 275, 275, 275, 275, 275, 150, 60}  // Default: {275, 275, 275, 275, 275, 275, 150, 60}
+#define MAX_TEMP {300, 275, 275, 275, 275, 275, 150, 60}  // Default: {275, 275, 275, 275, 275, 275, 150, 60}
 
 /**
  * Cold Extrusion Minimum Temperature
@@ -432,9 +432,9 @@
 #define X_MIN_POS   0  // Default: 0
 #define Y_MIN_POS   0  // Default: 0
 #define Z_MIN_POS   0  // Default: 0
-#define X_MAX_POS 235  // Default: 235
-#define Y_MAX_POS 235  // Default: 235
-#define Z_MAX_POS 250  // Default: 250
+#define X_MAX_POS 305  // Default: 235
+#define Y_MAX_POS 306  // Default: 235
+#define Z_MAX_POS 400  // Default: 250
 
 /**
  * X & Y Move Speeds/Feedrates
@@ -476,7 +476,7 @@
  * to enable leveling state after startup.
  *   Options: [disable: 0, enable: 1]
  */
-#define AUTO_LOAD_LEVELING 1  // Default: 1
+#define AUTO_LOAD_LEVELING 0  // Default: 1
 
 /**
  * Onboard / Printer SD
@@ -583,7 +583,7 @@
  *   Unit: [feedrate in mm/min]
  *   Value range: [min: 10, max: 12000]
  */
-#define LEVELING_EDGE_DISTANCE    20  // (mm) Inset distance from bed's edge for calculating leveling point location (Default: 20)
+#define LEVELING_EDGE_DISTANCE    30  // (mm) Inset distance from bed's edge for calculating leveling point location (Default: 20)
 #define LEVELING_Z_POS          0.2f  // (mm) Z-axis position when nozzle stays for leveling (Default: 0.2f)
 #define LEVELING_Z_RAISE       10.0f  // (mm) Z-axis position when nozzle move to next point (Default: 10.0f)
 #define LEVELING_XY_FEEDRATE    6000  // (mm/min) X and Y axes move feedrate (Default: 6000)
@@ -601,7 +601,7 @@
  *   Options: [disable: 0, enable: 1]
  */
 #define INVERTED_X_AXIS  0  // Default: 0
-#define INVERTED_Y_AXIS  0  // Default: 0
+#define INVERTED_Y_AXIS  1  // Default: 0
 #define INVERTED_Z_AXIS  0  // Default: 0
 #define INVERTED_LY_AXIS 0  // Default: 0
 
