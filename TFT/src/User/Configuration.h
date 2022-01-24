@@ -50,7 +50,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define EMULATED_M600 1  // Default: 1
+#define EMULATED_M600 0  // Default: 1
 
 /**
  * Emulated M109 And M190
@@ -172,7 +172,7 @@
  *     POPUP: Display a popup window for user confirmation.
  *     TOAST: A non-blocking Toast notification is displayed for few seconds. No user interaction is needed.
  */
-#define ACK_NOTIFICATION 1  // Default: 1
+#define ACK_NOTIFICATION 2  // Default: 1
 
 /**
  * Files Sorting
@@ -624,7 +624,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define PROBING_Z_OFFSET 1  // Default: 1
+#define PROBING_Z_OFFSET 0  // Default: 1
 
 /**
  * Probing Z Raise (Probe Offset, Mesh Editor)
@@ -650,7 +650,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define Z_STEPPER_ALIGNEMENT 0  // Default: 0
+#define Z_STEPPER_ALIGNEMENT 1  // Default: 0
 
 /**
  * TouchMI Settings (ABL)
@@ -684,7 +684,7 @@
  * The power supply uses the opposite of this logic to stay OFF.
  *   Options: [disable: 0, enable: 1]
  */
-#define PS_ACTIVE_HIGH 1  // Default: 1
+#define PS_ACTIVE_HIGH 0  // Default: 1
 
 /**
  * Power Supply Auto Shutdown Mode
@@ -770,7 +770,7 @@
  * Disable to reduce the loss of SD card or U disk.
  *   Options: [disable: 0, enable: 1]
  */
-#define PL_RECOVERY 1  // Default: 1
+#define PL_RECOVERY 0  // Default: 1
 
 /**
  * Power Loss Recovery Homing
@@ -856,7 +856,7 @@
  * Knob LED color at startup.
  *   Options: [OFF: 0, WHITE: 1, RED: 2, ORANGE: 3, YELLOW: 4, GREEN: 5, BLUE: 6, INDIGO: 7, VIOLET: 8]
  */
-#define KNOB_LED_COLOR 1  // Default: 1
+#define KNOB_LED_COLOR 5  // Default: 1
 
 // Keep the LED state in Marlin Mode
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE  // Default: uncommented (enabled)
@@ -942,9 +942,9 @@
  * Start, End and Cancel G-code Status
  *   Options: [disable: 0, enable: 1]
  */
-#define START_GCODE_ENABLED  0  // Default: 0
-#define END_GCODE_ENABLED    0  // Default: 0
-#define CANCEL_GCODE_ENABLED 0  // Default: 0
+#define START_GCODE_ENABLED  1  // Default: 0
+#define END_GCODE_ENABLED    1  // Default: 0
+#define CANCEL_GCODE_ENABLED 1  // Default: 0
 
 /**
  * Start, End and Cancel G-code
@@ -953,9 +953,9 @@
  * CANCEL_GCODE will run when a print is canceled if "CANCEL_GCODE_ENABLED" is enabled.
  *   Value range: [min: 3, max: 75 characters]
  */
-#define START_GCODE  "G28 XY R20\n"
-#define END_GCODE    "M104 S0\nM140 S0\nM107\nM18\n"
-#define CANCEL_GCODE "M104 S0\nM140 S0\nG28 XY R10\nM107\nM18\n"
+#define START_GCODE  "M75\n"
+#define END_GCODE    "M104 S0\nM140 S0\nM107\nM18\nM77\n"
+#define CANCEL_GCODE "M104 S0\nM140 S0\nG28 XY R10\nM107\nM18\nM77\n"
 
 //====================================================================================================
 //============================ Settings Configurable At Compile Time Only ============================
