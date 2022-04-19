@@ -75,7 +75,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define EVENT_LED 1  // Default: 1
+#define EVENT_LED 0  // Default: 1
 
 /**
  * G-code File Comment Parsing
@@ -232,7 +232,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define NOTIFICATION_M117 0  // Default: 0
+#define NOTIFICATION_M117 1  // Default: 0
 
 /**
  * Progress Numeric Display Mode During Print
@@ -290,7 +290,7 @@
  *
  *   Options: [Marlin Mode: 0, Touch Mode: 1, Blocked Marlin Mode: 2, Blocked Touch Mode: 3]
  */
-#define DEFAULT_MODE 1  // Default: 1
+#define DEFAULT_MODE 0  // Default: 1
 
 /**
  * Serial Always ON
@@ -322,7 +322,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define MARLIN_FULLSCREEN 0  // Default: 0
+#define MARLIN_FULLSCREEN 1  // Default: 0
 
 /**
  * Show Marlin Mode Title
@@ -353,13 +353,13 @@
  * Hotend Count
  *   Value range: [min: 0, max: 6]
  */
-#define HOTEND_COUNT 1  // Default: 1
+#define HOTEND_COUNT 0  // Default: 1
 
 /**
  * Heated Bed Support
  *   Options: [disable: 0, enable: 1]
  */
-#define HEATED_BED 1  // Default: 1
+#define HEATED_BED 0  // Default: 1
 
 /**
  * Heated Chamber Support
@@ -372,7 +372,7 @@
  * Extruder Count
  *   Value range: [min: 0, max: 6]
  */
-#define EXTRUDER_COUNT  1  // Default: 1
+#define EXTRUDER_COUNT  0  // Default: 1
 
 // For mixing extruder set to 1 (this option turns off auto detection of the number of extruders)
 #define MIXING_EXTRUDER 0  // Default: 0
