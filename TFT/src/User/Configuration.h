@@ -36,7 +36,7 @@
  *                P4: [min: 0, max: 9]
  *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 250000: 7, 500000: 8, 1000000: 9]
  */
-#define SP_1 6  // Default: 6
+#define SP_1 7  // Default: 6
 #define SP_2 0  // Default: 0
 #define SP_3 0  // Default: 0
 #define SP_4 0  // Default: 0
@@ -50,7 +50,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define EMULATED_M600 1  // Default: 1
+#define EMULATED_M600 0  // Default: 1
 
 /**
  * Emulated M109 And M190
